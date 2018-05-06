@@ -15,78 +15,25 @@ namespace RockPaperScissors.Test
             Console.SetOut(_output);
         }
         
-        [Fact]
-        public void PaperBeatsRocket()
+        [Theory]
+        [InlineData("P", "R", "Player 1 wins")]
+        [InlineData("R", "S", "Player 1 wins")]
+        [InlineData("S", "R", "Player 2 wins")]
+        [InlineData("P", "S", "Player 2 wins")] 
+        [InlineData("S", "S", "Draw")] 
+        [InlineData("R", "R", "Draw")] 
+        [InlineData("P", "P", "Draw")] 
+        public void SingleGame(string player1Move, string player2Move, string result)
         {
             MockConsoleInput(
-                "P", 
-                "R");
+                player1Move, 
+                player2Move);
             
             Program.Main(new string[] {});
             
-            Assert.Equal(@"Player 1 input (P,R,S):
+            Assert.Equal($@"Player 1 input (P,R,S):
 Player 2 input (P,R,S):
-Player 1 wins
-", _output.ToString());
-        }
-
-        [Fact]
-        public void RockBeatsScissors()
-        {
-            MockConsoleInput(
-                "R", 
-                "S");
-            
-            Program.Main(new string[] {});
-            
-            Assert.Equal(@"Player 1 input (P,R,S):
-Player 2 input (P,R,S):
-Player 1 wins
-", _output.ToString());
-        }
-
-        [Fact]
-        public void RockBeatsScissorsForPlayer2()
-        {
-            MockConsoleInput(
-                "S", 
-                "R");
-            
-            Program.Main(new string[] {});
-            
-            Assert.Equal(@"Player 1 input (P,R,S):
-Player 2 input (P,R,S):
-Player 2 wins
-", _output.ToString());
-        }
-
-        [Fact]
-        public void ScissorsBeatsPaper()
-        {
-            MockConsoleInput(
-                "P", 
-                "S");
-            
-            Program.Main(new string[] {});
-            
-            Assert.Equal(@"Player 1 input (P,R,S):
-Player 2 input (P,R,S):
-Player 2 wins
-", _output.ToString());
-        }
-
-        [Fact]
-        public void ScissorsAndScissorIsADraw()
-        {
-            MockConsoleInput(
-                "S", 
-                "S");
-            
-            Program.Main(new string[] {});
-            
-            Assert.Equal(@"Player 1 input (P,R,S):
-Player 2 input (P,R,S):
-Draw
+{result}
 ", _output.ToString());
         }
 
