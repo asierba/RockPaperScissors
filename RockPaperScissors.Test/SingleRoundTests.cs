@@ -7,6 +7,9 @@ namespace RockPaperScissors.Test
 {
     public class SingleRoundTests
     {
+        private const string Paper = "P";
+        private const string Rock = "R";
+        private const string Scissors = "S";
         private readonly StringWriter _output;
 
         public SingleRoundTests()
@@ -16,13 +19,15 @@ namespace RockPaperScissors.Test
         }
         
         [Theory]
-        [InlineData("P", "R", "Player 1 wins")]
-        [InlineData("R", "S", "Player 1 wins")]
-        [InlineData("S", "R", "Player 2 wins")]
-        [InlineData("P", "S", "Player 2 wins")] 
-        [InlineData("S", "S", "Draw")] 
-        [InlineData("R", "R", "Draw")] 
-        [InlineData("P", "P", "Draw")] 
+        [InlineData(Rock, Scissors, "Player 1 wins")]
+        [InlineData(Rock, Paper, "Player 2 wins")]
+        [InlineData(Paper, Rock, "Player 1 wins")]
+        [InlineData(Paper, Scissors, "Player 2 wins")]
+        [InlineData(Scissors, Paper, "Player 1 wins")]
+        [InlineData(Scissors, Rock, "Player 2 wins")]
+        [InlineData(Rock, Rock, "Draw")] 
+        [InlineData(Paper, Paper, "Draw")] 
+        [InlineData(Scissors, Scissors, "Draw")] 
         public void SingleGame(string player1Move, string player2Move, string result)
         {
             MockConsoleInput(

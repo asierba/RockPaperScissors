@@ -31,6 +31,11 @@ namespace RockPaperScissors
                 return "Player 2 wins";
             }
 
+            if (player1Move == "R" && player2Move == "P")
+            {
+                return "Player 2 wins";
+            }
+
             return "Player 1 wins";
         }
     }
