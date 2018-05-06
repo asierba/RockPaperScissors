@@ -1,4 +1,5 @@
 ﻿using System;
+using RockPaperScissors.Moves;
 
 namespace RockPaperScissors
 {
@@ -6,37 +7,56 @@ namespace RockPaperScissors
     {
         public static void Main(string[] args)
         {
-            Console.WriteLine("Player 1 input (P,R,S):");
-            var player1Move = Console.ReadLine();
-            Console.WriteLine("Player 2 input (P,R,S):");
-            var player2Move = Console.ReadLine();
+            var player1Move = GetPlayer1Move();
+            var player2Move = GetPlayer2Move();
 
-            var result = GetResult(player1Move, player2Move);
+            var score = CalculateScore(player1Move, player2Move);
 
-            Console.WriteLine(result);
+            ShowResult(score);
         }
 
-        private static string GetResult(string player1Move, string player2Move)
+        private static IMove GetPlayer1Move()
         {
-            if (player1Move == player2Move)
-                return "Draw";
+            Console.WriteLine("Player 1 input (P,R,S):");
+            var playerMove = Console.ReadLine();
             
-            if (player1Move == "S" && player2Move == "R")
-            {
-                return "Player 2 wins";
-            }
+            return CreatePlayerMove(playerMove);
+        }
 
-            if (player1Move == "P" && player2Move == "S")
-            {
-                return "Player 2 wins";
-            }
+        private static IMove GetPlayer2Move()
+        {
+            Console.WriteLine("Player 2 input (P,R,S):");
+            var playerMove = Console.ReadLine();
+            
+            return CreatePlayerMove(playerMove);
+        }
 
-            if (player1Move == "R" && player2Move == "P")
-            {
-                return "Player 2 wins";
-            }
+        private static IMove CreatePlayerMove(string playerMove)
+        {
+            if (playerMove == "P")
+                return new Paper();
+            if (playerMove == "R")
+                return new Rock();
+            if (playerMove == "S")
+                return new Scissors();
 
-            return "Player 1 wins";
+            throw new ArgumentException("invalid input");
+        }
+
+        private static Score CalculateScore(IMove player1Move, IMove player2Move)
+        {
+            if (player1Move.Beats(player2Move))
+                return Score.Player1Wins;
+
+            if (player2Move.Beats(player1Move))
+                return Score.Player2Wins;
+
+            return Score.Draw;;
+        }
+
+        private static void ShowResult(Score score)
+        {
+            Console.WriteLine(score);
         }
     }
 }

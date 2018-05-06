@@ -5,26 +5,26 @@ using Xunit;
 
 namespace RockPaperScissors.Test
 {
-    public class SingleRoundTests
+    public class ProgramTests
     {
         private const string Paper = "P";
         private const string Rock = "R";
         private const string Scissors = "S";
         private readonly StringWriter _output;
 
-        public SingleRoundTests()
+        public ProgramTests()
         {
             _output = new StringWriter();
             Console.SetOut(_output);
         }
         
         [Theory]
-        [InlineData(Rock, Scissors, "Player 1 wins")]
-        [InlineData(Rock, Paper, "Player 2 wins")]
-        [InlineData(Paper, Rock, "Player 1 wins")]
-        [InlineData(Paper, Scissors, "Player 2 wins")]
-        [InlineData(Scissors, Paper, "Player 1 wins")]
-        [InlineData(Scissors, Rock, "Player 2 wins")]
+        [InlineData(Rock, Scissors, "Player1Wins")]
+        [InlineData(Rock, Paper, "Player2Wins")]
+        [InlineData(Paper, Rock, "Player1Wins")]
+        [InlineData(Paper, Scissors, "Player2Wins")]
+        [InlineData(Scissors, Paper, "Player1Wins")]
+        [InlineData(Scissors, Rock, "Player2Wins")]
         [InlineData(Rock, Rock, "Draw")] 
         [InlineData(Paper, Paper, "Draw")] 
         [InlineData(Scissors, Scissors, "Draw")] 
