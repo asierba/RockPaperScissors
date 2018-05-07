@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using RockPaperScissors.Moves;
 
@@ -6,14 +7,13 @@ namespace RockPaperScissors
 {
     public static class Program
     {
-        private const int DefaultNumbeOfRounds = 3;
         static readonly IMove[] PossibleMoves = {new Paper(), new Rock(), new Scissors()};
 
         public static void Main(string[] args)
         {
-            var numbeOfRounds = args.Length > 0 ? 
-                Convert.ToInt32(args[0]) 
-                : DefaultNumbeOfRounds;
+            var numbeOfTurns = GetNumbeOfTurns(args);
+
+            var scores = new List<Score>();
 
             do
             {
@@ -22,10 +22,22 @@ namespace RockPaperScissors
 
                 var score = CalculateScore(player1Move, player2Move);
 
-                ShowResult(score);
+                scores.Add(score);
+                DisplayScore(score);
                 
-                numbeOfRounds--;
-            } while (numbeOfRounds > 0);
+                numbeOfTurns--;
+            } while (numbeOfTurns > 0);
+
+            DisplayFinalScore(scores);
+        }
+
+        private static int GetNumbeOfTurns(IReadOnlyList<string> args)
+        {
+            const int defaultNumbeOfTurns = 3;
+
+            return args.Count > 0 ? 
+                Convert.ToInt32(args[0]) 
+                : defaultNumbeOfTurns;
         }
 
         private static IMove GetMove(string playerName)
@@ -59,9 +71,33 @@ namespace RockPaperScissors
             return Score.Draw;;
         }
 
-        private static void ShowResult(Score score)
+        private static void DisplayScore(Score score)
         {
             Console.WriteLine(score);
+        }
+
+        private static void DisplayFinalScore(IReadOnlyCollection<Score> scores)
+        {
+            var timesPlayer1Wins = scores.Count(x => x == Score.Player1Wins);
+            var timesPlayer2Wins = scores.Count(x => x == Score.Player2Wins);
+            var timesDraw = scores.Count(x => x == Score.Draw);
+            var finalScore = GetFinalScore(timesPlayer1Wins, timesPlayer2Wins);
+
+            Console.WriteLine($@"
+Results:
+{finalScore}!!
+ - {timesPlayer1Wins} times Player1Wins 
+ - {timesPlayer2Wins} times Player2Wins
+ - {timesDraw} times Draw");
+        }
+
+        private static Score GetFinalScore(int timesPlayer1Wins, int timesPlayer2Wins)
+        {
+            if (timesPlayer1Wins > timesPlayer2Wins)
+                return Score.Player1Wins;
+            if (timesPlayer2Wins > timesPlayer1Wins)
+                return Score.Player2Wins;
+            return Score.Draw;
         }
     }
 }
