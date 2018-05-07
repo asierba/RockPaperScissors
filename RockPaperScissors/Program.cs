@@ -22,14 +22,20 @@ namespace RockPaperScissors
         {
             var keys = string.Join(',', PossibleMoves.Select(x => x.Key));
             Console.WriteLine($"{playerName} input ({keys}):");
-            var playerMove = Console.ReadLine();
+            var playerInput = Console.ReadLine();
+
+            var move = CreatePlayerMove(playerInput);
+
+            if (move.GetType() == typeof(InvalidMove))
+                return GetMove(playerName);
             
-            return CreatePlayerMove(playerMove);
+            return move;
         }
 
         private static IMove CreatePlayerMove(string playerMove)
         {
-            return PossibleMoves.Single(x => x.Key == playerMove);
+            return PossibleMoves.SingleOrDefault(x => x.Key == playerMove) 
+                   ?? new InvalidMove();
         }
 
         private static Score CalculateScore(IMove player1Move, IMove player2Move)

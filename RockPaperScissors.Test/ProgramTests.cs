@@ -1,6 +1,6 @@
 using System;
 using System.IO;
-using Microsoft.VisualStudio.TestPlatform.TestHost;
+using System.Runtime.CompilerServices;
 using Xunit;
 
 namespace RockPaperScissors.Test
@@ -19,16 +19,16 @@ namespace RockPaperScissors.Test
         }
         
         [Theory]
-        [InlineData(Rock, Scissors, "Player1Wins")]
-        [InlineData(Rock, Paper, "Player2Wins")]
-        [InlineData(Paper, Rock, "Player1Wins")]
-        [InlineData(Paper, Scissors, "Player2Wins")]
-        [InlineData(Scissors, Paper, "Player1Wins")]
-        [InlineData(Scissors, Rock, "Player2Wins")]
-        [InlineData(Rock, Rock, "Draw")] 
-        [InlineData(Paper, Paper, "Draw")] 
-        [InlineData(Scissors, Scissors, "Draw")] 
-        public void SingleGame(string player1Move, string player2Move, string result)
+        [InlineData(Rock, Scissors, Score.Player1Wins)]
+        [InlineData(Rock, Paper, Score.Player2Wins)]
+        [InlineData(Paper, Rock, Score.Player1Wins)]
+        [InlineData(Paper, Scissors, Score.Player2Wins)]
+        [InlineData(Scissors, Paper, Score.Player1Wins)]
+        [InlineData(Scissors, Rock, Score.Player2Wins)]
+        [InlineData(Rock, Rock, Score.Draw)] 
+        [InlineData(Paper, Paper, Score.Draw)] 
+        [InlineData(Scissors, Scissors, Score.Draw)] 
+        public void SingleGame(string player1Move, string player2Move, Score score)
         {
             MockConsoleInput(
                 player1Move, 
@@ -36,9 +36,10 @@ namespace RockPaperScissors.Test
             
             Program.Main(new string[] {});
             
-            Assert.Equal($@"Player 1 input (P,R,S):
+            Assert.Equal(
+$@"Player 1 input (P,R,S):
 Player 2 input (P,R,S):
-{result}
+{score}
 ", _output.ToString());
         }
 
@@ -46,6 +47,25 @@ Player 2 input (P,R,S):
         {
             var input = string.Join(Environment.NewLine, inputs);
             Console.SetIn(new StringReader(input));
+        }
+
+        [Fact]
+        public void InvalidInputGetsIgnoredAndRequestedAgain()
+        {
+            MockConsoleInput(
+                "Invalid", 
+                Scissors, 
+                Paper);
+            
+            Program.Main(new string[] {});
+            
+            Assert.Equal(
+@"Player 1 input (P,R,S):
+Player 1 input (P,R,S):
+Player 2 input (P,R,S):
+Player1Wins
+", _output.ToString());
+            
         }
     }
 }
