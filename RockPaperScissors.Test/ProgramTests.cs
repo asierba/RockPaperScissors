@@ -28,13 +28,15 @@ namespace RockPaperScissors.Test
         [InlineData(Rock, Rock, Score.Draw)] 
         [InlineData(Paper, Paper, Score.Draw)] 
         [InlineData(Scissors, Scissors, Score.Draw)] 
-        public void SingleGame(string player1Move, string player2Move, Score score)
+        public void GameOfSinlgeRound(string player1Move, string player2Move, Score score)
         {
+            const string numberOfRunds = "1";
+            
             MockConsoleInput(
                 player1Move, 
                 player2Move);
-            
-            Program.Main(new string[] {});
+
+            Program.Main(new[] {numberOfRunds});
             
             Assert.Equal(
 $@"Player 1 input (P,R,S):
@@ -52,8 +54,32 @@ Player 2 input (P,R,S):
         [Fact]
         public void InvalidInputGetsIgnoredAndRequestedAgain()
         {
+            const string numberOfRunds = "1";
+
             MockConsoleInput(
                 "Invalid", 
+                Scissors, 
+                Paper);
+            
+            Program.Main(new string[] {numberOfRunds});
+            
+            Assert.Equal(
+@"Player 1 input (P,R,S):
+Player 1 input (P,R,S):
+Player 2 input (P,R,S):
+Player1Wins
+", _output.ToString());
+            
+        }
+        
+        [Fact]
+        public void GameOf3RoundsByDefault()
+        {
+            MockConsoleInput(
+                Scissors, 
+                Paper,
+                Scissors, 
+                Paper,
                 Scissors, 
                 Paper);
             
@@ -61,6 +87,11 @@ Player 2 input (P,R,S):
             
             Assert.Equal(
 @"Player 1 input (P,R,S):
+Player 2 input (P,R,S):
+Player1Wins
+Player 1 input (P,R,S):
+Player 2 input (P,R,S):
+Player1Wins
 Player 1 input (P,R,S):
 Player 2 input (P,R,S):
 Player1Wins

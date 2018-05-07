@@ -6,16 +6,26 @@ namespace RockPaperScissors
 {
     public static class Program
     {
+        private const int DefaultNumbeOfRounds = 3;
         static readonly IMove[] PossibleMoves = {new Paper(), new Rock(), new Scissors()};
 
         public static void Main(string[] args)
         {
-            var player1Move = GetMove("Player 1");
-            var player2Move = GetMove("Player 2");
+            var numbeOfRounds = args.Length > 0 ? 
+                Convert.ToInt32(args[0]) 
+                : DefaultNumbeOfRounds;
 
-            var score = CalculateScore(player1Move, player2Move);
+            do
+            {
+                var player1Move = GetMove("Player 1");
+                var player2Move = GetMove("Player 2");
 
-            ShowResult(score);
+                var score = CalculateScore(player1Move, player2Move);
+
+                ShowResult(score);
+                
+                numbeOfRounds--;
+            } while (numbeOfRounds > 0);
         }
 
         private static IMove GetMove(string playerName)
