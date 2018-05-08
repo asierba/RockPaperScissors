@@ -4,14 +4,14 @@ using Xunit;
 
 namespace RockPaperScissors.Test
 {
-    public class ProgramTests
+    public class GameShould
     {
         private const string Paper = "P";
         private const string Rock = "R";
         private const string Scissors = "S";
         private readonly StringWriter _output;
 
-        public ProgramTests()
+        public GameShould()
         {
             _output = new StringWriter();
             Console.SetOut(_output);
@@ -27,15 +27,15 @@ namespace RockPaperScissors.Test
         [InlineData(Rock, Rock, Score.Draw)] 
         [InlineData(Paper, Paper, Score.Draw)] 
         [InlineData(Scissors, Scissors, Score.Draw)] 
-        public void GameOfSinlgeTurnAsksForInputDisplaysScore(string player1Move, string player2Move, Score expectedScore)
+        public void AskForUserInputAndDisplayScoreForEachTurm(string player1Move, string player2Move, Score expectedScore)
         {
-            const string numberOfRunds = "1";
+            const string numberOfRounds = "1";
             
             MockConsoleInput(
                 player1Move, 
                 player2Move);
 
-            Program.Main(new[] {numberOfRunds});
+            Program.Main(new[] {numberOfRounds});
             
             
             Assert.Contains(
@@ -46,16 +46,16 @@ Player 2 input (P,R,S):
         }
 
         [Fact]
-        public void InvalidInputGetsIgnoredAndRequestedAgain()
+        public void IgnoreInvalidUserInputAndRequestItAgain()
         {
-            const string numberOfRunds = "1";
+            const string numberOfRounds = "1";
 
             MockConsoleInput(
                 "Invalid", 
                 Scissors, 
                 Paper);
             
-            Program.Main(new[] {numberOfRunds});
+            Program.Main(new[] {numberOfRounds});
             
             Assert.Contains(
 @"Player 1 input (P,R,S):
@@ -66,7 +66,71 @@ Player1Wins", _output.ToString());
         }
 
         [Fact]
-        public void GameOf3TurnsAsksForInput3TimesAndDisplaysFinalScore()
+        public void DisplayFinalScore()
+        {
+            const string numberOfRounds = "3";
+            
+            MockConsoleInput(
+                Scissors, 
+                Paper,
+                
+                Paper, 
+                Paper,
+                
+                Scissors, 
+                Paper);
+            
+            Program.Main(new[] {numberOfRounds});
+            
+            Assert.Contains(
+@"Final score after 3 turns:
+Player1Wins!!
+ - 2 times Player1Wins 
+ - 0 times Player2Wins
+ - 1 times Draw
+", _output.ToString());
+            
+        }
+
+        [Fact]
+        public void DisplayFinalScoreAsDrawWhenNobodyWins()
+        {
+            const string numberOfRounds = "3";
+            
+            MockConsoleInput(
+                Scissors, 
+                Paper,
+                
+                Paper, 
+                Paper,
+                
+                Paper, 
+                Scissors);
+            
+            Program.Main(new[] {numberOfRounds});
+            
+            Assert.Equal(
+@"Player 1 input (P,R,S):
+Player 2 input (P,R,S):
+Player1Wins
+Player 1 input (P,R,S):
+Player 2 input (P,R,S):
+Draw
+Player 1 input (P,R,S):
+Player 2 input (P,R,S):
+Player2Wins
+
+Final score after 3 turns:
+Draw!!
+ - 1 times Player1Wins 
+ - 1 times Player2Wins
+ - 1 times Draw
+", _output.ToString());
+            
+        }
+
+        [Fact]
+        public void ConsistOf3TurnsByDefault()
         {
             MockConsoleInput(
                 Scissors, 
@@ -80,29 +144,17 @@ Player1Wins", _output.ToString());
             
             Program.Main(new string[] {});
             
-            Assert.Equal(
-                @"Player 1 input (P,R,S):
-Player 2 input (P,R,S):
-Player1Wins
-Player 1 input (P,R,S):
-Player 2 input (P,R,S):
-Draw
-Player 1 input (P,R,S):
-Player 2 input (P,R,S):
-Player1Wins
-
-Results:
-Player1Wins!!
- - 2 times Player1Wins 
- - 0 times Player2Wins
- - 1 times Draw
-", _output.ToString());
+            Assert.Contains(
+                "Final score after 3 turns:", 
+                _output.ToString());
             
         }
 
         [Fact]
-        public void GameOf3TurnsWhereNobodyWinsIsADraw()
+        public void PlayAFullGame()
         {
+            const string numberOfRunds = "5";
+            
             MockConsoleInput(
                 Scissors, 
                 Paper,
@@ -110,13 +162,19 @@ Player1Wins!!
                 Paper, 
                 Paper,
                 
-                Paper, 
-                Scissors);
+                Scissors, 
+                Paper,
+                
+                Rock, 
+                Paper,
+                
+                Rock,
+                Rock);
             
-            Program.Main(new string[] {});
+            Program.Main(new[] {numberOfRunds});
             
             Assert.Equal(
-                @"Player 1 input (P,R,S):
+@"Player 1 input (P,R,S):
 Player 2 input (P,R,S):
 Player1Wins
 Player 1 input (P,R,S):
@@ -124,13 +182,19 @@ Player 2 input (P,R,S):
 Draw
 Player 1 input (P,R,S):
 Player 2 input (P,R,S):
+Player1Wins
+Player 1 input (P,R,S):
+Player 2 input (P,R,S):
 Player2Wins
+Player 1 input (P,R,S):
+Player 2 input (P,R,S):
+Draw
 
-Results:
-Draw!!
- - 1 times Player1Wins 
+Final score after 5 turns:
+Player1Wins!!
+ - 2 times Player1Wins 
  - 1 times Player2Wins
- - 1 times Draw
+ - 2 times Draw
 ", _output.ToString());
             
         }
