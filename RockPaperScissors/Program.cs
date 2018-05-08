@@ -17,7 +17,7 @@ namespace RockPaperScissors
             const int defaultNumbeOfTurns = 3;
 
             return args.Count > 0 ? 
-                Convert.ToInt32(args[0]) 
+                Convert.ToInt32(args[1]) 
                 : defaultNumbeOfTurns;
         }
     }

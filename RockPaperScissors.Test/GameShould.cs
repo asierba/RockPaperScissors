@@ -29,14 +29,13 @@ namespace RockPaperScissors.Test
         [InlineData(Scissors, Scissors, Score.Draw)] 
         public void AskForUserInputAndDisplayScoreForEachTurm(string player1Move, string player2Move, Score expectedScore)
         {
-            const string numberOfRounds = "1";
+            const string numberOfTurns = "1";
             
             MockConsoleInput(
                 player1Move, 
                 player2Move);
 
-            Program.Main(new[] {numberOfRounds});
-            
+            PlayGameFor(numberOfTurns);
             
             Assert.Contains(
 $@"Player 1 input (P,R,S):
@@ -48,14 +47,14 @@ Player 2 input (P,R,S):
         [Fact]
         public void IgnoreInvalidUserInputAndRequestItAgain()
         {
-            const string numberOfRounds = "1";
+            const string numberOfTurns = "1";
 
             MockConsoleInput(
                 "Invalid", 
                 Scissors, 
                 Paper);
             
-            Program.Main(new[] {numberOfRounds});
+            PlayGameFor(numberOfTurns);
             
             Assert.Contains(
 @"Player 1 input (P,R,S):
@@ -68,7 +67,7 @@ Player1Wins", _output.ToString());
         [Fact]
         public void DisplayFinalScore()
         {
-            const string numberOfRounds = "3";
+            const string numberOfTurns = "3";
             
             MockConsoleInput(
                 Scissors, 
@@ -80,7 +79,7 @@ Player1Wins", _output.ToString());
                 Scissors, 
                 Paper);
             
-            Program.Main(new[] {numberOfRounds});
+            PlayGameFor(numberOfTurns);
             
             Assert.Contains(
 @"Final score after 3 turns:
@@ -95,7 +94,7 @@ Player1Wins!!
         [Fact]
         public void DisplayFinalScoreAsDrawWhenNobodyWins()
         {
-            const string numberOfRounds = "3";
+            const string numberOfTurns = "3";
             
             MockConsoleInput(
                 Scissors, 
@@ -107,7 +106,7 @@ Player1Wins!!
                 Paper, 
                 Scissors);
             
-            Program.Main(new[] {numberOfRounds});
+            PlayGameFor(numberOfTurns);
             
             Assert.Equal(
 @"Player 1 input (P,R,S):
@@ -153,7 +152,7 @@ Draw!!
         [Fact]
         public void PlayAFullGame()
         {
-            const string numberOfRunds = "5";
+            const string numberOfTurns = "5";
             
             MockConsoleInput(
                 Scissors, 
@@ -171,7 +170,7 @@ Draw!!
                 Rock,
                 Rock);
             
-            Program.Main(new[] {numberOfRunds});
+            PlayGameFor(numberOfTurns);
             
             Assert.Equal(
 @"Player 1 input (P,R,S):
@@ -203,6 +202,11 @@ Player1Wins!!
         {
             var input = string.Join(Environment.NewLine, inputs);
             Console.SetIn(new StringReader(input));
+        }
+
+        private static void PlayGameFor(string numberOfTurns)
+        {
+            Program.Main(new[] { "--turns", numberOfTurns});
         }
     }
 }
