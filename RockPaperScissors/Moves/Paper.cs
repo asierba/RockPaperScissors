@@ -8,5 +8,10 @@
         {
             return other.GetType() == typeof(Rock);
         }
+
+        public override string ToString()
+        {
+            return "Paper";
+        }
     }
 }

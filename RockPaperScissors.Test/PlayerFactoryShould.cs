@@ -6,12 +6,20 @@ namespace RockPaperScissors.Test
 {
     public class PlayerFactoryShould
     {
+        private readonly PlayerFactory _playerFactory;
+
+        public PlayerFactoryShould()
+        {
+            var randomNumberGenerator = new RandomGenerator();
+            _playerFactory = new PlayerFactory(randomNumberGenerator);
+        }
+        
         [Theory]
         [InlineData(typeof(HumanPlayer), "human")]
         [InlineData(typeof(RandomPlayer), "random")]
         public void CreateAHumanPlayer(Type expectedType, string playerType)
         {
-            var player =  PlayerFactory.Create(playerType, "Player 1");
+            var player =  _playerFactory.Create(playerType, "Player 1");
             Assert.IsType(expectedType, player);
         }
 
@@ -19,7 +27,7 @@ namespace RockPaperScissors.Test
         public void ThrowExceptionWhenNotReconizedPlayer()
         {
             Assert.Throws<ArgumentException>(() =>
-                PlayerFactory.Create("invalidplayertype", "Player 1"));
+                _playerFactory.Create("invalidplayertype", "Player 1"));
         }
     }
 }

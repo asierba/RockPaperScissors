@@ -195,7 +195,87 @@ Player1Wins!!
  - 1 times Player2Wins
  - 2 times Draw
 ", _output.ToString());
+        }
+
+        [Fact]
+        public void RandomCpu()
+        {
+            const string numberOfTurns = "3";
             
+            var moves = new []{
+                Scissors, 
+                Paper,
+                
+                Paper, 
+                Paper,
+                
+                Rock, 
+                Scissors};
+
+            var stubRandomGenerator = new StubRandomGenerator(moves);
+            var args = new [] {"--turns", numberOfTurns, "--player1", "random", "--player2", "random"};
+            var game = GameFactory.Create(args, stubRandomGenerator);
+            game.Play();
+            
+            
+            Assert.Equal(
+                @"Scissors
+Paper
+Player1Wins
+Paper
+Paper
+Draw
+Rock
+Scissors
+Player1Wins
+
+Final score after 3 turns:
+Player1Wins!!
+ - 2 times Player1Wins 
+ - 0 times Player2Wins
+ - 1 times Draw
+", _output.ToString());
+        }
+        
+        [Fact]
+        public void MixOfHumanAndRandomCpu()
+        {
+            const string numberOfTurns = "3";
+
+
+            MockConsoleInput(
+                Scissors, 
+                Paper, 
+                Rock
+                );
+            var moves = new []{
+                Paper,
+                Paper,
+                Scissors};
+
+            var stubRandomGenerator = new StubRandomGenerator(moves);
+            var args = new [] {"--turns", numberOfTurns, "--player1", "human", "--player2", "random"};
+            var game = GameFactory.Create(args, stubRandomGenerator);
+            game.Play();
+            
+            
+            Assert.Equal(
+@"Player 1 input (P,R,S):
+Paper
+Player1Wins
+Player 1 input (P,R,S):
+Paper
+Draw
+Player 1 input (P,R,S):
+Scissors
+Player1Wins
+
+Final score after 3 turns:
+Player1Wins!!
+ - 2 times Player1Wins 
+ - 0 times Player2Wins
+ - 1 times Draw
+", _output.ToString());
         }
 
         private static void MockConsoleInput(params string[] inputs)

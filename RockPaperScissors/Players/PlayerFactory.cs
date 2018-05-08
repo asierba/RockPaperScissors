@@ -2,16 +2,23 @@
 
 namespace RockPaperScissors.Players
 {
-    public static class PlayerFactory
+    public class PlayerFactory
     {
-        public static IPlayer Create(string playerType, string playerName)
+        private readonly IRandomGenerator _randomGenerator;
+
+        public PlayerFactory(IRandomGenerator randomGenerator)
+        {
+            _randomGenerator = randomGenerator;
+        }
+
+        public IPlayer Create(string playerType, string playerName)
         {
             switch (playerType)
             {
                 case "human":
                     return new HumanPlayer(playerName);
                 case "random":
-                    return new RandomPlayer();
+                    return new RandomPlayer(_randomGenerator);
                 default:
                     throw new ArgumentException("not recognized player type");
             }

@@ -8,5 +8,10 @@
         {            
             return other.GetType() == typeof(Paper);
         }
+
+        public override string ToString()
+        {
+            return "Scissors";
+        }
     }
 }

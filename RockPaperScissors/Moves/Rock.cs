@@ -8,5 +8,10 @@
         {
             return other.GetType() == typeof(Scissors);
         }
+
+        public override string ToString()
+        {
+            return "Rock";
+        }
     }
 }

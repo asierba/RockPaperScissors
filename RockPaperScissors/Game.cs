@@ -6,7 +6,7 @@ using RockPaperScissors.Players;
 
 namespace RockPaperScissors
 {
-    internal class Game
+    public class Game
     {
         private readonly IPlayer _player1;
         private readonly IPlayer _player2;

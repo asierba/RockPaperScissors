@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Linq;
 using RockPaperScissors.Moves;
+using static RockPaperScissors.Players.AllPossibleMoves;
 
 namespace RockPaperScissors.Players
 {
     public class HumanPlayer : IPlayer
     {
-        private static readonly IMove[] PossibleMoves = {new Paper(), new Rock(), new Scissors()};
-        
         private readonly string _playerName;
 
         public HumanPlayer(string playerName)
@@ -29,7 +28,7 @@ namespace RockPaperScissors.Players
             return move;
         }
         
-        private static IMove CreatePlayerMove(string playerMove)
+        private IMove CreatePlayerMove(string playerMove)
         {
             return PossibleMoves.SingleOrDefault(x => x.Key == playerMove) 
                    ?? new InvalidMove();
