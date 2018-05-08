@@ -2,7 +2,7 @@
 
 namespace RockPaperScissors.Players
 {
-    internal interface IPlayer
+    public interface IPlayer
     {
         IMove GetMove();
     }

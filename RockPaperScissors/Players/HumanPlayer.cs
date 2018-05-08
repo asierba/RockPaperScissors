@@ -4,7 +4,7 @@ using RockPaperScissors.Moves;
 
 namespace RockPaperScissors.Players
 {
-    internal class HumanPlayer : IPlayer
+    public class HumanPlayer : IPlayer
     {
         private static readonly IMove[] PossibleMoves = {new Paper(), new Rock(), new Scissors()};
         

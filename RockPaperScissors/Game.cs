@@ -10,17 +10,18 @@ namespace RockPaperScissors
     {
         private readonly IPlayer _player1;
         private readonly IPlayer _player2;
+        private readonly int _numberOfTurns;
 
-        public Game(IPlayer player1, IPlayer player2)
+        public Game(IPlayer player1, IPlayer player2, int numberOfTurns)
         {
             _player1 = player1;
             _player2 = player2;
+            _numberOfTurns = numberOfTurns;
         }
         
-        public void Play(int numbeOfTurns)
+        public void Play()
         {
-            var scores = PlayTurns(numbeOfTurns);
-
+            var scores = PlayTurns(_numberOfTurns);
             DisplayFinalScore(scores);
         }
 
@@ -51,7 +52,7 @@ namespace RockPaperScissors
             if (player2Move.Beats(player1Move))
                 return Score.Player2Wins;
 
-            return Score.Draw;;
+            return Score.Draw;
         }
 
         private static void DisplayScore(Score score)
