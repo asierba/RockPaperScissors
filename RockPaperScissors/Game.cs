@@ -2,29 +2,35 @@
 using System.Collections.Generic;
 using System.Linq;
 using RockPaperScissors.Moves;
+using RockPaperScissors.Players;
 
 namespace RockPaperScissors
 {
-    public static class Game
+    internal class Game
     {
-        static readonly IMove[] PossibleMoves = {new Paper(), new Rock(), new Scissors()};
+        private readonly IPlayer _player1;
+        private readonly IPlayer _player2;
 
-        public static void Play(int numbeOfTurns)
+        public Game(IPlayer player1, IPlayer player2)
+        {
+            _player1 = player1;
+            _player2 = player2;
+        }
+        
+        public void Play(int numbeOfTurns)
         {
             var scores = PlayTurns(numbeOfTurns);
 
             DisplayFinalScore(scores);
         }
 
-        private static IEnumerable<Score> PlayTurns(int numbeOfTurns)
+        private IEnumerable<Score> PlayTurns(int numbeOfTurns) => 
+            PlayTurns(numbeOfTurns, Enumerable.Empty<Score>());
+
+        private IEnumerable<Score> PlayTurns(int numbeOfTurns, IEnumerable<Score> scores)
         {
-            return PlayTurns(numbeOfTurns, Enumerable.Empty<Score>());
-        }
-        
-        private static IEnumerable<Score> PlayTurns(int numbeOfTurns, IEnumerable<Score> scores)
-        {
-            var player1Move = GetMove("Player 1");
-            var player2Move = GetMove("Player 2");
+            var player1Move = _player1.GetMove();
+            var player2Move = _player2.GetMove();
 
             var score = CalculateScore(player1Move, player2Move);
 
@@ -32,31 +38,9 @@ namespace RockPaperScissors
             DisplayScore(score);
 
             if (numbeOfTurns == 1)
-            {
                 return newScores;
-            }
 
             return PlayTurns(numbeOfTurns-1, newScores);
-        }
-      
-        private static IMove GetMove(string playerName)
-        {
-            var keys = string.Join(',', PossibleMoves.Select(x => x.Key));
-            Console.WriteLine($"{playerName} input ({keys}):");
-            var playerInput = Console.ReadLine();
-
-            var move = CreatePlayerMove(playerInput);
-
-            if (move.GetType() == typeof(InvalidMove))
-                return GetMove(playerName);
-            
-            return move;
-        }
-
-        private static IMove CreatePlayerMove(string playerMove)
-        {
-            return PossibleMoves.SingleOrDefault(x => x.Key == playerMove) 
-                   ?? new InvalidMove();
         }
 
         private static Score CalculateScore(IMove player1Move, IMove player2Move)
