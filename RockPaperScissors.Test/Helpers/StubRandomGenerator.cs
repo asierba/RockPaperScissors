@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using static RockPaperScissors.Moves.AllPossibleMoves;
+using RockPaperScissors.Moves;
 
-namespace RockPaperScissors.Test
+namespace RockPaperScissors.Test.Helpers
 {
     public class StubRandomGenerator : IRandomGenerator
     {
@@ -16,7 +16,7 @@ namespace RockPaperScissors.Test
         public int GetNext(int min, int max)
         {
             var move = _sequenceOfMoves.Pop();
-            return PossibleMoves.FindIndex(x => x.Key == move);
+            return AllPossibleMoves.PossibleMoves.FindIndex(x => x.Key == move);
         }
     }
 }

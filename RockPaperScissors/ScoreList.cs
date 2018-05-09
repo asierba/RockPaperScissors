@@ -26,8 +26,7 @@ namespace RockPaperScissors
             var timesDraw = scores.Count(x => x == Score.Draw);
             var finalScore = GetFinalScore(timesPlayer1Wins, timesPlayer2Wins);
 
-            return $@"
-Final score after {numOfTurns} turns:
+            return $@"Final score after {numOfTurns} turns:
 {finalScore}!!
  - {timesPlayer1Wins} times Player1Wins 
  - {timesPlayer2Wins} times Player2Wins

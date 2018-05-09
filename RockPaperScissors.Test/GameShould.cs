@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 using Xunit;
-using static RockPaperScissors.Test.GameBuilder;
+using static RockPaperScissors.Test.Helpers.GameBuilder;
 
 namespace RockPaperScissors.Test
 {
@@ -28,7 +28,7 @@ namespace RockPaperScissors.Test
         [InlineData(Rock, Rock, Score.Draw)] 
         [InlineData(Paper, Paper, Score.Draw)] 
         [InlineData(Scissors, Scissors, Score.Draw)] 
-        public void DisplayScoreForEachTurm(string player1Move, string player2Move, Score expectedScore)
+        public void CalculatesScore(string player1Move, string player2Move, Score expectedScore)
         {
             MockConsoleInput(
                 player1Move, 
@@ -40,32 +40,14 @@ namespace RockPaperScissors.Test
             
             game.Play();
 
-            Assert.Contains(expectedScore.ToString(), _output.ToString());
-        }
-
-        [Fact]
-        public void IgnoreInvalidUserInputAndRequestItAgain()
-        {
-            MockConsoleInput(
-                "Invalid", 
-                Scissors, 
-                Paper);
-
-            var game = AGame
-                .WithNumberOfTurns(1)
-                .Build();
-            
-            game.Play();
 
             Assert.Contains(
-@"Player 1 input (P,R,S):Player 1 input (P,R,S):Scissors
-Player 2 input (P,R,S):Paper
-Player1Wins", _output.ToString());
-            
+$@"Final score after 1 turns:
+{expectedScore}!!", _output.ToString());
         }
 
         [Fact]
-        public void DisplayFinalScore()
+        public void PlayAFullGameOfHumanPlayers()
         {
             MockConsoleInput(
                 Scissors, 
@@ -77,84 +59,7 @@ Player1Wins", _output.ToString());
                 Scissors, 
                 Paper);
 
-            var game = AGame
-                .WithNumberOfTurns(3)
-                .Build();
-            
-            game.Play();
-
-            Assert.Contains(
-@"Final score after 3 turns:
-Player1Wins!!
- - 2 times Player1Wins 
- - 0 times Player2Wins
- - 1 times Draw
-", _output.ToString());
-            
-        }
-
-        [Fact]
-        public void DisplayFinalScoreAsDrawWhenNobodyWins()
-        {
-            MockConsoleInput(
-                Scissors, 
-                Paper,
-                
-                Paper, 
-                Paper,
-                
-                Paper, 
-                Scissors);
-
-            var game = AGame
-                .WithNumberOfTurns(3)
-                .Build();
-            
-            game.Play();
-
-            Assert.Equal(
-@"Player 1 input (P,R,S):Scissors
-Player 2 input (P,R,S):Paper
-Player1Wins
-Player 1 input (P,R,S):Paper
-Player 2 input (P,R,S):Paper
-Draw
-Player 1 input (P,R,S):Paper
-Player 2 input (P,R,S):Scissors
-Player2Wins
-
-Final score after 3 turns:
-Draw!!
- - 1 times Player1Wins 
- - 1 times Player2Wins
- - 1 times Draw
-", _output.ToString());
-            
-        }
-
-        [Fact]
-        public void PlayAFullGameOf5Turns()
-        {
-            MockConsoleInput(
-                Scissors, 
-                Paper,
-                
-                Paper, 
-                Paper,
-                
-                Scissors, 
-                Paper,
-                
-                Rock, 
-                Paper,
-                
-                Rock,
-                Rock);
-
-            var game = AGame
-                .WithNumberOfTurns(5)
-                .Build();
-            
+            var game = AGame.Build();
             game.Play();
 
             Assert.Equal(
@@ -167,18 +72,12 @@ Draw
 Player 1 input (P,R,S):Scissors
 Player 2 input (P,R,S):Paper
 Player1Wins
-Player 1 input (P,R,S):Rock
-Player 2 input (P,R,S):Paper
-Player2Wins
-Player 1 input (P,R,S):Rock
-Player 2 input (P,R,S):Rock
-Draw
 
-Final score after 5 turns:
+Final score after 3 turns:
 Player1Wins!!
  - 2 times Player1Wins 
- - 1 times Player2Wins
- - 2 times Draw
+ - 0 times Player2Wins
+ - 1 times Draw
 ", _output.ToString());
         }
 
@@ -196,7 +95,6 @@ Player1Wins!!
                 Scissors};
 
             var game = AGame
-                .WithNumberOfTurns(3)
                 .WithPlayer1("random")
                 .WithPlayer2("random")
                 .WithRandomMoves(randomMoves)
@@ -242,7 +140,6 @@ Player1Wins!!
                 Scissors};
           
             var game = AGame
-                .WithNumberOfTurns(3)
                 .WithPlayer1("human")
                 .WithPlayer2("random")
                 .WithRandomMoves(randomMoves)
@@ -306,6 +203,27 @@ Player1Wins!!
  - 0 times Player2Wins
  - 0 times Draw
 ", _output.ToString());
+        }
+        
+        [Fact]
+        public void IgnoreInvalidUserInputAndRequestItAgain()
+        {
+            MockConsoleInput(
+                "Invalid", 
+                Scissors, 
+                Paper);
+
+            var game = AGame
+                .WithNumberOfTurns(1)
+                .Build();
+            
+            game.Play();
+
+            Assert.Contains(
+@"Player 1 input (P,R,S):Player 1 input (P,R,S):Scissors
+Player 2 input (P,R,S):Paper
+Player1Wins", _output.ToString());
+            
         }
 
         private static void MockConsoleInput(params string[] inputs)

@@ -23,6 +23,7 @@ namespace RockPaperScissors
         public void Play()
         {
             var scores = PlayTurns(_numberOfTurns);
+            _userInterface.Display("");
             _userInterface.DisplayImportant(scores);
         }
 

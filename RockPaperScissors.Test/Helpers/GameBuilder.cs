@@ -1,10 +1,10 @@
 using RockPaperScissors.UI;
 
-namespace RockPaperScissors.Test
+namespace RockPaperScissors.Test.Helpers
 {
     public class GameBuilder
     {
-        private static int _numberOfTurns = 3;
+        private int _numberOfTurns = 3;
         private string _playerType1 = "human";
         private string _playerType2  = "human";
         private IRandomGenerator _randomGenerator = new RandomGenerator();
