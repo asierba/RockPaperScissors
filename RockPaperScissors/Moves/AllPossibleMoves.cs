@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using RockPaperScissors.Moves;
 
-namespace RockPaperScissors.Players
+namespace RockPaperScissors.Moves
 {
     public static class AllPossibleMoves
     {

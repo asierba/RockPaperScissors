@@ -19,6 +19,8 @@ namespace RockPaperScissors.Players
                     return new HumanPlayer(playerName);
                 case PlayerType.Random:
                     return new RandomPlayer(_randomGenerator);
+                case PlayerType.Tactical:
+                    return  new TacticalPlayer(_randomGenerator);
                 default:
                     throw new ArgumentException("not recognized player type");
             }

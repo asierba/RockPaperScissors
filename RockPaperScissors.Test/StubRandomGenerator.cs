@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using static RockPaperScissors.Players.AllPossibleMoves;
+using static RockPaperScissors.Moves.AllPossibleMoves;
 
 namespace RockPaperScissors.Test
 {

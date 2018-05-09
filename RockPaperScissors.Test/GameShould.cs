@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using Xunit;
 
@@ -198,11 +199,11 @@ Player1Wins!!
         }
 
         [Fact]
-        public void RandomCpu()
+        public void PlayAGameWithTwoRandomCpuPlayers()
         {
             const string numberOfTurns = "3";
             
-            var moves = new []{
+            var randomMoves = new []{
                 Scissors, 
                 Paper,
                 
@@ -212,12 +213,9 @@ Player1Wins!!
                 Rock, 
                 Scissors};
 
-            var stubRandomGenerator = new StubRandomGenerator(moves);
-            var args = new [] {"--turns", numberOfTurns, "--player1", "random", "--player2", "random"};
-            var game = GameFactory.Create(args, stubRandomGenerator);
-            game.Play();
-            
-            
+            var args = new[] {"--turns", numberOfTurns, "--player1", "random", "--player2", "random"};
+            PlayAGameWithRandomMoves(randomMoves, args);
+
             Assert.Equal(
                 @"Scissors
 Paper
@@ -236,9 +234,9 @@ Player1Wins!!
  - 1 times Draw
 ", _output.ToString());
         }
-        
+
         [Fact]
-        public void MixOfHumanAndRandomCpu()
+        public void PlayAGameWithMixOfHumanAndRandomCpuPlayers()
         {
             const string numberOfTurns = "3";
 
@@ -248,15 +246,14 @@ Player1Wins!!
                 Paper, 
                 Rock
                 );
-            var moves = new []{
+            var randomMoves = new []{
                 Paper,
                 Paper,
                 Scissors};
 
-            var stubRandomGenerator = new StubRandomGenerator(moves);
             var args = new [] {"--turns", numberOfTurns, "--player1", "human", "--player2", "random"};
-            var game = GameFactory.Create(args, stubRandomGenerator);
-            game.Play();
+            PlayAGameWithRandomMoves(randomMoves, args);
+
             
             
             Assert.Equal(
@@ -278,6 +275,34 @@ Player1Wins!!
 ", _output.ToString());
         }
 
+        [Fact]
+        public void PlayAGameOfTwoTacticalPlayers()
+        {
+            const string numberOfTurns = "2";
+            
+            var randomMoves = new []{
+                Scissors, 
+                Paper};
+
+            var args = new[] {"--turns", numberOfTurns, "--player1", "tactical", "--player2", "tactical"};
+            PlayAGameWithRandomMoves(randomMoves, args);
+
+            Assert.Equal(
+                @"Scissors
+Paper
+Player1Wins
+Rock
+Scissors
+Player1Wins
+
+Final score after 2 turns:
+Player1Wins!!
+ - 2 times Player1Wins 
+ - 0 times Player2Wins
+ - 0 times Draw
+", _output.ToString());
+        }
+
         private static void MockConsoleInput(params string[] inputs)
         {
             var input = string.Join(Environment.NewLine, inputs);
@@ -287,6 +312,13 @@ Player1Wins!!
         private static void PlayGameFor(string numberOfTurns)
         {
             Program.Main(new[] { "--turns", numberOfTurns});
+        }
+
+        private static void PlayAGameWithRandomMoves(IEnumerable<string> randomMoves, string[] args)
+        {
+            var stubRandomGenerator = new StubRandomGenerator(randomMoves);
+            var game = GameFactory.Create(args, stubRandomGenerator);
+            game.Play();
         }
     }
 }

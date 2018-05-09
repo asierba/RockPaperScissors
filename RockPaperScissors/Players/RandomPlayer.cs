@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Linq;
 using RockPaperScissors.Moves;
-using static RockPaperScissors.Players.AllPossibleMoves;
 
 namespace RockPaperScissors.Players
 {
@@ -16,10 +14,8 @@ namespace RockPaperScissors.Players
         
         public IMove GetMove()
         {
-            var possibleMoves = PossibleMoves;
-            var index = _randomGenerator.GetNext(0, possibleMoves.Count-1);
-            var move = possibleMoves.ElementAt(index);
-            
+            var move = _randomGenerator.RandomMove();
+
             Console.WriteLine(move);
 
             return move;

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using RockPaperScissors.Moves;
-using static RockPaperScissors.Players.AllPossibleMoves;
+using static RockPaperScissors.Moves.AllPossibleMoves;
 
 namespace RockPaperScissors.Players
 {
