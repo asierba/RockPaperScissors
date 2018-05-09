@@ -1,8 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using RockPaperScissors.UI;
 using Xunit;
+using static RockPaperScissors.Test.GameBuilder;
 
 namespace RockPaperScissors.Test
 {
@@ -31,14 +30,16 @@ namespace RockPaperScissors.Test
         [InlineData(Scissors, Scissors, Score.Draw)] 
         public void AskForUserInputAndDisplayScoreForEachTurm(string player1Move, string player2Move, Score expectedScore)
         {
-            const string numberOfTurns = "1";
-            
             MockConsoleInput(
                 player1Move, 
                 player2Move);
 
-            PlayGameFor(numberOfTurns);
+            var game = AGame
+                .WithNumberOfTurns(1)
+                .Build();
             
+            game.Play();
+
             Assert.Contains(
 $@"Player 1 input (P,R,S):
 Player 2 input (P,R,S):
@@ -49,15 +50,17 @@ Player 2 input (P,R,S):
         [Fact]
         public void IgnoreInvalidUserInputAndRequestItAgain()
         {
-            const string numberOfTurns = "1";
-
             MockConsoleInput(
                 "Invalid", 
                 Scissors, 
                 Paper);
+
+            var game = AGame
+                .WithNumberOfTurns(1)
+                .Build();
             
-            PlayGameFor(numberOfTurns);
-            
+            game.Play();
+
             Assert.Contains(
 @"Player 1 input (P,R,S):
 Player 1 input (P,R,S):
@@ -69,8 +72,6 @@ Player1Wins", _output.ToString());
         [Fact]
         public void DisplayFinalScore()
         {
-            const string numberOfTurns = "3";
-            
             MockConsoleInput(
                 Scissors, 
                 Paper,
@@ -80,9 +81,13 @@ Player1Wins", _output.ToString());
                 
                 Scissors, 
                 Paper);
+
+            var game = AGame
+                .WithNumberOfTurns(3)
+                .Build();
             
-            PlayGameFor(numberOfTurns);
-            
+            game.Play();
+
             Assert.Contains(
 @"Final score after 3 turns:
 Player1Wins!!
@@ -96,8 +101,6 @@ Player1Wins!!
         [Fact]
         public void DisplayFinalScoreAsDrawWhenNobodyWins()
         {
-            const string numberOfTurns = "3";
-            
             MockConsoleInput(
                 Scissors, 
                 Paper,
@@ -107,9 +110,13 @@ Player1Wins!!
                 
                 Paper, 
                 Scissors);
+
+            var game = AGame
+                .WithNumberOfTurns(3)
+                .Build();
             
-            PlayGameFor(numberOfTurns);
-            
+            game.Play();
+
             Assert.Equal(
 @"Player 1 input (P,R,S):
 Player 2 input (P,R,S):
@@ -152,10 +159,8 @@ Draw!!
         }
 
         [Fact]
-        public void PlayAFullGame()
+        public void PlayAFullGameOf5Turns()
         {
-            const string numberOfTurns = "5";
-            
             MockConsoleInput(
                 Scissors, 
                 Paper,
@@ -171,9 +176,13 @@ Draw!!
                 
                 Rock,
                 Rock);
+
+            var game = AGame
+                .WithNumberOfTurns(5)
+                .Build();
             
-            PlayGameFor(numberOfTurns);
-            
+            game.Play();
+
             Assert.Equal(
 @"Player 1 input (P,R,S):
 Player 2 input (P,R,S):
@@ -202,8 +211,6 @@ Player1Wins!!
         [Fact]
         public void PlayAGameWithTwoRandomCpuPlayers()
         {
-            const string numberOfTurns = "3";
-            
             var randomMoves = new []{
                 Scissors, 
                 Paper,
@@ -214,8 +221,13 @@ Player1Wins!!
                 Rock, 
                 Scissors};
 
-            var args = new[] {"--turns", numberOfTurns, "--player1", "random", "--player2", "random"};
-            PlayAGameWithRandomMoves(randomMoves, args);
+            var game = AGame
+                .WithNumberOfTurns(3)
+                .WithPlayer1("random")
+                .WithPlayer2("random")
+                .WithRandomMoves(randomMoves)
+                .Build();
+            game.Play();
 
             Assert.Equal(
                 @"Scissors
@@ -239,9 +251,6 @@ Player1Wins!!
         [Fact]
         public void PlayAGameWithMixOfHumanAndRandomCpuPlayers()
         {
-            const string numberOfTurns = "3";
-
-
             MockConsoleInput(
                 Scissors, 
                 Paper, 
@@ -251,12 +260,16 @@ Player1Wins!!
                 Paper,
                 Paper,
                 Scissors};
+          
+            var game = AGame
+                .WithNumberOfTurns(3)
+                .WithPlayer1("human")
+                .WithPlayer2("random")
+                .WithRandomMoves(randomMoves)
+                .Build();
+            game.Play();
 
-            var args = new [] {"--turns", numberOfTurns, "--player1", "human", "--player2", "random"};
-            PlayAGameWithRandomMoves(randomMoves, args);
 
-            
-            
             Assert.Equal(
 @"Player 1 input (P,R,S):
 Paper
@@ -279,14 +292,18 @@ Player1Wins!!
         [Fact]
         public void PlayAGameOfTwoTacticalPlayers()
         {
-            const string numberOfTurns = "2";
-            
             var randomMoves = new []{
                 Scissors, 
                 Paper};
-
-            var args = new[] {"--turns", numberOfTurns, "--player1", "tactical", "--player2", "tactical"};
-            PlayAGameWithRandomMoves(randomMoves, args);
+            
+            var game = AGame
+                .WithNumberOfTurns(2)
+                .WithPlayer1("tactical")
+                .WithPlayer2("tactical")
+                .WithRandomMoves(randomMoves)
+                .Build();
+            
+            game.Play();
 
             Assert.Equal(
                 @"Scissors
@@ -308,19 +325,6 @@ Player1Wins!!
         {
             var input = string.Join(Environment.NewLine, inputs);
             Console.SetIn(new StringReader(input));
-        }
-
-        private static void PlayGameFor(string numberOfTurns)
-        {
-            Program.Main(new[] { "--turns", numberOfTurns});
-        }
-
-        private static void PlayAGameWithRandomMoves(IEnumerable<string> randomMoves, string[] args)
-        {
-            var stubRandomGenerator = new StubRandomGenerator(randomMoves);
-            var consoleInterface = new ConsoleInterface();
-            var game = GameFactory.Create(args, stubRandomGenerator, consoleInterface);
-            game.Play();
         }
     }
 }
