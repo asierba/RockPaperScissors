@@ -2,7 +2,8 @@
 {
     public interface IUserInterface
     {
-        void Display(object text);
+        void Display(object text, bool newLine = true);
+        void DisplayImportant(object text);
         string ReadInput();
     }
 }

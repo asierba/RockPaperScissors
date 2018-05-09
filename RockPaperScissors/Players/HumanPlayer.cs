@@ -20,7 +20,7 @@ namespace RockPaperScissors.Players
 
         public IMove GetMove()
         {
-            _userInterface.Display(_askForInputtext);
+            _userInterface.Display(_askForInputtext, newLine: false);
             var playerInput = _userInterface.ReadInput();
 
             var move = CreatePlayerMove(playerInput);

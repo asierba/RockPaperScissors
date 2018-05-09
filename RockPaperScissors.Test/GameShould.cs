@@ -28,7 +28,7 @@ namespace RockPaperScissors.Test
         [InlineData(Rock, Rock, Score.Draw)] 
         [InlineData(Paper, Paper, Score.Draw)] 
         [InlineData(Scissors, Scissors, Score.Draw)] 
-        public void AskForUserInputAndDisplayScoreForEachTurm(string player1Move, string player2Move, Score expectedScore)
+        public void DisplayScoreForEachTurm(string player1Move, string player2Move, Score expectedScore)
         {
             MockConsoleInput(
                 player1Move, 
@@ -40,11 +40,7 @@ namespace RockPaperScissors.Test
             
             game.Play();
 
-            Assert.Contains(
-$@"Player 1 input (P,R,S):
-Player 2 input (P,R,S):
-{expectedScore}
-", _output.ToString());
+            Assert.Contains(expectedScore.ToString(), _output.ToString());
         }
 
         [Fact]
@@ -62,9 +58,8 @@ Player 2 input (P,R,S):
             game.Play();
 
             Assert.Contains(
-@"Player 1 input (P,R,S):
-Player 1 input (P,R,S):
-Player 2 input (P,R,S):
+@"Player 1 input (P,R,S):Player 1 input (P,R,S):Scissors
+Player 2 input (P,R,S):Paper
 Player1Wins", _output.ToString());
             
         }
@@ -118,14 +113,14 @@ Player1Wins!!
             game.Play();
 
             Assert.Equal(
-@"Player 1 input (P,R,S):
-Player 2 input (P,R,S):
+@"Player 1 input (P,R,S):Scissors
+Player 2 input (P,R,S):Paper
 Player1Wins
-Player 1 input (P,R,S):
-Player 2 input (P,R,S):
+Player 1 input (P,R,S):Paper
+Player 2 input (P,R,S):Paper
 Draw
-Player 1 input (P,R,S):
-Player 2 input (P,R,S):
+Player 1 input (P,R,S):Paper
+Player 2 input (P,R,S):Scissors
 Player2Wins
 
 Final score after 3 turns:
@@ -134,27 +129,6 @@ Draw!!
  - 1 times Player2Wins
  - 1 times Draw
 ", _output.ToString());
-            
-        }
-
-        [Fact]
-        public void ConsistOf3TurnsByDefault()
-        {
-            MockConsoleInput(
-                Scissors, 
-                Paper,
-                
-                Paper, 
-                Paper,
-                
-                Scissors, 
-                Paper);
-            
-            Program.Main(new string[] {});
-            
-            Assert.Contains(
-                "Final score after 3 turns:", 
-                _output.ToString());
             
         }
 
@@ -184,20 +158,20 @@ Draw!!
             game.Play();
 
             Assert.Equal(
-@"Player 1 input (P,R,S):
-Player 2 input (P,R,S):
+@"Player 1 input (P,R,S):Scissors
+Player 2 input (P,R,S):Paper
 Player1Wins
-Player 1 input (P,R,S):
-Player 2 input (P,R,S):
+Player 1 input (P,R,S):Paper
+Player 2 input (P,R,S):Paper
 Draw
-Player 1 input (P,R,S):
-Player 2 input (P,R,S):
+Player 1 input (P,R,S):Scissors
+Player 2 input (P,R,S):Paper
 Player1Wins
-Player 1 input (P,R,S):
-Player 2 input (P,R,S):
+Player 1 input (P,R,S):Rock
+Player 2 input (P,R,S):Paper
 Player2Wins
-Player 1 input (P,R,S):
-Player 2 input (P,R,S):
+Player 1 input (P,R,S):Rock
+Player 2 input (P,R,S):Rock
 Draw
 
 Final score after 5 turns:
@@ -230,13 +204,19 @@ Player1Wins!!
             game.Play();
 
             Assert.Equal(
-                @"Scissors
+                @"Player 1 (Random CPU):S
+Scissors
+Player 2 (Random CPU):P
 Paper
 Player1Wins
+Player 1 (Random CPU):P
 Paper
+Player 2 (Random CPU):P
 Paper
 Draw
+Player 1 (Random CPU):R
 Rock
+Player 2 (Random CPU):S
 Scissors
 Player1Wins
 
@@ -271,13 +251,16 @@ Player1Wins!!
 
 
             Assert.Equal(
-@"Player 1 input (P,R,S):
+@"Player 1 input (P,R,S):Scissors
+Player 2 (Random CPU):P
 Paper
 Player1Wins
-Player 1 input (P,R,S):
+Player 1 input (P,R,S):Paper
+Player 2 (Random CPU):P
 Paper
 Draw
-Player 1 input (P,R,S):
+Player 1 input (P,R,S):Rock
+Player 2 (Random CPU):S
 Scissors
 Player1Wins
 
@@ -306,10 +289,14 @@ Player1Wins!!
             game.Play();
 
             Assert.Equal(
-                @"Scissors
+                @"Player 1 (Tactical CPU):S
+Scissors
+Player 2 (Tactical CPU):P
 Paper
 Player1Wins
+Player 1 (Tactical CPU):R
 Rock
+Player 2 (Tactical CPU):S
 Scissors
 Player1Wins
 

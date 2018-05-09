@@ -23,7 +23,7 @@ namespace RockPaperScissors
         public void Play()
         {
             var scores = PlayTurns(_numberOfTurns);
-            _userInterface.Display(scores);
+            _userInterface.DisplayImportant(scores);
         }
 
         private ScoreList PlayTurns(int numbeOfTurns) => 
@@ -32,12 +32,14 @@ namespace RockPaperScissors
         private ScoreList PlayTurns(int numbeOfTurns, ScoreList scoreList)
         {
             var player1Move = _player1.GetMove();
+            _userInterface.Display(player1Move);
             var player2Move = _player2.GetMove();
+            _userInterface.Display(player2Move);
 
             var score = CalculateScore(player1Move, player2Move);
+            _userInterface.DisplayImportant(score);
 
             var newScoreList = scoreList.Add(score);
-            _userInterface.Display(score);
 
             if (numbeOfTurns == 1)
                 return newScoreList;

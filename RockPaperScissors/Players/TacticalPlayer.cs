@@ -8,11 +8,13 @@ namespace RockPaperScissors.Players
 {
     public class TacticalPlayer : IPlayer
     {
+        private readonly string _playerName;
         private readonly IUserInterface _userInterface;
         private IMove _nextMove;
 
-        public TacticalPlayer(IRandomGenerator randomGenerator, IUserInterface userInterface)
+        public TacticalPlayer(string playerName, IRandomGenerator randomGenerator, IUserInterface userInterface)
         {
+            _playerName = $"{playerName} (Tactical CPU)";
             _userInterface = userInterface;
             _nextMove = randomGenerator.RandomMove();
         }
@@ -20,7 +22,7 @@ namespace RockPaperScissors.Players
         public IMove GetMove()
         {
             var currentMove = _nextMove;
-            _userInterface.Display(currentMove);
+            _userInterface.Display($"{_playerName}:{currentMove.Key}");
             _nextMove = PossibleMoves.Single(x => x.Beats(currentMove));
             return currentMove;
         }
