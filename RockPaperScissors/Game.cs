@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using RockPaperScissors.Moves;
 using RockPaperScissors.Players;
@@ -25,23 +24,23 @@ namespace RockPaperScissors
             DisplayFinalScore(scores);
         }
 
-        private IEnumerable<Score> PlayTurns(int numbeOfTurns) => 
-            PlayTurns(numbeOfTurns, Enumerable.Empty<Score>());
+        private ScoreList PlayTurns(int numbeOfTurns) => 
+            PlayTurns(numbeOfTurns, new ScoreList(Enumerable.Empty<Score>()));
 
-        private IEnumerable<Score> PlayTurns(int numbeOfTurns, IEnumerable<Score> scores)
+        private ScoreList PlayTurns(int numbeOfTurns, ScoreList scoreList)
         {
             var player1Move = _player1.GetMove();
             var player2Move = _player2.GetMove();
 
             var score = CalculateScore(player1Move, player2Move);
 
-            var newScores = scores.Concat(new[] {score});
+            var newScoreList = scoreList.Add(score);
             DisplayScore(score);
 
             if (numbeOfTurns == 1)
-                return newScores;
+                return newScoreList;
 
-            return PlayTurns(numbeOfTurns-1, newScores);
+            return PlayTurns(numbeOfTurns-1, newScoreList);
         }
 
         private static Score CalculateScore(IMove player1Move, IMove player2Move)
@@ -60,30 +59,9 @@ namespace RockPaperScissors
             Console.WriteLine(score);
         }
 
-        private static void DisplayFinalScore(IEnumerable<Score> scoresToDisplay)
+        private static void DisplayFinalScore(ScoreList scores)
         {
-            var scores = scoresToDisplay.ToArray();
-            var numOfTurns = scores.Count();
-            var timesPlayer1Wins = scores.Count(x => x == Score.Player1Wins);
-            var timesPlayer2Wins = scores.Count(x => x == Score.Player2Wins);
-            var timesDraw = scores.Count(x => x == Score.Draw);
-            var finalScore = GetFinalScore(timesPlayer1Wins, timesPlayer2Wins);
-
-            Console.WriteLine($@"
-Final score after {numOfTurns} turns:
-{finalScore}!!
- - {timesPlayer1Wins} times Player1Wins 
- - {timesPlayer2Wins} times Player2Wins
- - {timesDraw} times Draw");
-        }
-
-        private static Score GetFinalScore(int timesPlayer1Wins, int timesPlayer2Wins)
-        {
-            if (timesPlayer1Wins > timesPlayer2Wins)
-                return Score.Player1Wins;
-            if (timesPlayer2Wins > timesPlayer1Wins)
-                return Score.Player2Wins;
-            return Score.Draw;
+            Console.WriteLine(scores);
         }
     }
 }
