@@ -1,34 +1,36 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using RockPaperScissors.Moves;
+using RockPaperScissors.UI;
 using static RockPaperScissors.Moves.AllPossibleMoves;
 
 namespace RockPaperScissors.Players
 {
     public class HumanPlayer : IPlayer
     {
-        private readonly string _playerName;
+        private readonly IUserInterface _userInterface;
+        private readonly string _askForInputtext;
 
-        public HumanPlayer(string playerName)
+        public HumanPlayer(string playerName, IUserInterface userInterface)
         {
-            _playerName = playerName;
+            _userInterface = userInterface;
+            
+            var keys = string.Join(',', PossibleMoves.Select(x => x.Key));
+            _askForInputtext = $"{playerName} input ({keys}):";
         }
 
         public IMove GetMove()
         {
-            var keys = string.Join(',', PossibleMoves.Select(x => x.Key));
-            Console.WriteLine($"{_playerName} input ({keys}):");
-            var playerInput = Console.ReadLine();
+            _userInterface.Display(_askForInputtext);
+            var playerInput = _userInterface.ReadInput();
 
             var move = CreatePlayerMove(playerInput);
-
             if (move.GetType() == typeof(InvalidMove))
                 return GetMove();
             
             return move;
         }
         
-        private IMove CreatePlayerMove(string playerMove)
+        private static IMove CreatePlayerMove(string playerMove)
         {
             return PossibleMoves.SingleOrDefault(x => x.Key == playerMove) 
                    ?? new InvalidMove();

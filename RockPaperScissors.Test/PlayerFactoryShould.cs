@@ -1,5 +1,6 @@
 ﻿using System;
 using RockPaperScissors.Players;
+using RockPaperScissors.UI;
 using Xunit;
 
 namespace RockPaperScissors.Test
@@ -11,7 +12,8 @@ namespace RockPaperScissors.Test
         public PlayerFactoryShould()
         {
             var randomNumberGenerator = new RandomGenerator();
-            _playerFactory = new PlayerFactory(randomNumberGenerator);
+            var userInterface = new ConsoleInterface();
+            _playerFactory = new PlayerFactory(randomNumberGenerator, userInterface);
         }
         
         [Theory]

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using RockPaperScissors.UI;
 using Xunit;
 
 namespace RockPaperScissors.Test
@@ -317,7 +318,8 @@ Player1Wins!!
         private static void PlayAGameWithRandomMoves(IEnumerable<string> randomMoves, string[] args)
         {
             var stubRandomGenerator = new StubRandomGenerator(randomMoves);
-            var game = GameFactory.Create(args, stubRandomGenerator);
+            var consoleInterface = new ConsoleInterface();
+            var game = GameFactory.Create(args, stubRandomGenerator, consoleInterface);
             game.Play();
         }
     }

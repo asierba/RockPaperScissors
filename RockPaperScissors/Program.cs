@@ -1,4 +1,4 @@
-﻿using RockPaperScissors.Players;
+﻿using RockPaperScissors.UI;
 
 namespace RockPaperScissors
 {
@@ -7,8 +7,9 @@ namespace RockPaperScissors
         public static void Main(string[] args)
         {
             var randomGenerator = new RandomGenerator();
-
-            var game = GameFactory.Create(args, randomGenerator);
+            var consoleInterface = new ConsoleInterface();
+            
+            var game = GameFactory.Create(args, randomGenerator, consoleInterface);
             game.Play();
         }
     }

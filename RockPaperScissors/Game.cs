@@ -1,7 +1,7 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using RockPaperScissors.Moves;
 using RockPaperScissors.Players;
+using RockPaperScissors.UI;
 
 namespace RockPaperScissors
 {
@@ -10,18 +10,20 @@ namespace RockPaperScissors
         private readonly IPlayer _player1;
         private readonly IPlayer _player2;
         private readonly int _numberOfTurns;
+        private readonly IUserInterface _userInterface;
 
-        public Game(IPlayer player1, IPlayer player2, int numberOfTurns)
+        public Game(IPlayer player1, IPlayer player2, int numberOfTurns, IUserInterface userInterface)
         {
             _player1 = player1;
             _player2 = player2;
             _numberOfTurns = numberOfTurns;
+            _userInterface = userInterface;
         }
         
         public void Play()
         {
             var scores = PlayTurns(_numberOfTurns);
-            DisplayFinalScore(scores);
+            _userInterface.Display(scores);
         }
 
         private ScoreList PlayTurns(int numbeOfTurns) => 
@@ -35,7 +37,7 @@ namespace RockPaperScissors
             var score = CalculateScore(player1Move, player2Move);
 
             var newScoreList = scoreList.Add(score);
-            DisplayScore(score);
+            _userInterface.Display(score);
 
             if (numbeOfTurns == 1)
                 return newScoreList;
@@ -52,16 +54,6 @@ namespace RockPaperScissors
                 return Score.Player2Wins;
 
             return Score.Draw;
-        }
-
-        private static void DisplayScore(Score score)
-        {
-            Console.WriteLine(score);
-        }
-
-        private static void DisplayFinalScore(ScoreList scores)
-        {
-            Console.WriteLine(scores);
         }
     }
 }
