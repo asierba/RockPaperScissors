@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using RockPaperScissors.Players;
+using Xunit;
 
 namespace RockPaperScissors.Test
 {
@@ -12,6 +13,17 @@ namespace RockPaperScissors.Test
             var args = new[] { "--turns", turns};
             var result = ArgumentParser.Parse(args);
             Assert.Equal(expectedTurns, result.NumberOfTurns);
+        }
+        
+        [Theory]
+        [InlineData("nonenumeric")]
+        [InlineData("-3")]
+        [InlineData("0")]
+        public void DefaultsNumberOfTurnsTo3_WhenInvalidNumber(string turns)
+        {
+            var args = new[] { "--turns", turns};
+            var result = ArgumentParser.Parse(args);
+            Assert.Equal(3, result.NumberOfTurns);
         }
 
         [Fact]
@@ -39,14 +51,15 @@ namespace RockPaperScissors.Test
         }
 
         [Theory]
-        [InlineData("human")]
-        [InlineData("random")]
-        [InlineData("tactical")]
-        public void ParsePlayer(string playerType)
+        [InlineData("human", PlayerType.Human)]
+        [InlineData("random", PlayerType.Random)]
+        [InlineData("tactical", PlayerType.Tactical)]
+        public void ParsePlayer(string playerTypeArg, PlayerType playerType)
         {
-            var args = new[] { "--player1", playerType};
+            var args = new[] { "--player1", playerTypeArg, "--player2", playerTypeArg};
             var result = ArgumentParser.Parse(args);
-            Assert.Equal(playerType, result.Player1);
+            Assert.Equal(playerType, result.PlayerType1);
+            Assert.Equal(playerType, result.PlayerType2);
         }
 
         [Fact]
@@ -54,7 +67,16 @@ namespace RockPaperScissors.Test
         {
             var args = new[] { "--player2"};
             var result = ArgumentParser.Parse(args);
-            Assert.Equal("human", result.Player2);
+            Assert.Equal(PlayerType.Human, result.PlayerType2);
+        }
+        
+        [Fact]
+        public void DefaultsPlayersToHuman_WhenInvalidPlayerType()
+        {
+            var args = new[] { "--player1", "invalidtype", "--player2", "invalidtype"};
+            var result = ArgumentParser.Parse(args);
+            Assert.Equal(PlayerType.Human, result.PlayerType1);
+            Assert.Equal(PlayerType.Human, result.PlayerType2);
         }
     }
 }

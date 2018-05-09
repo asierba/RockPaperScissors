@@ -15,19 +15,12 @@ namespace RockPaperScissors.Test
         }
         
         [Theory]
-        [InlineData(typeof(HumanPlayer), "human")]
-        [InlineData(typeof(RandomPlayer), "random")]
-        public void CreateAHumanPlayer(Type expectedType, string playerType)
+        [InlineData(typeof(HumanPlayer), PlayerType.Human)]
+        [InlineData(typeof(RandomPlayer), PlayerType.Random)]
+        public void CreateAHumanPlayer(Type expectedType, PlayerType playerType)
         {
             var player =  _playerFactory.Create(playerType, "Player 1");
             Assert.IsType(expectedType, player);
-        }
-
-        [Fact]
-        public void ThrowExceptionWhenNotReconizedPlayer()
-        {
-            Assert.Throws<ArgumentException>(() =>
-                _playerFactory.Create("invalidplayertype", "Player 1"));
         }
     }
 }

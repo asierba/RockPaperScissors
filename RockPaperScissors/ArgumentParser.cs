@@ -1,29 +1,49 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using RockPaperScissors.Players;
 
 namespace RockPaperScissors
 {
     public static class ArgumentParser
     {
+        private const int DefaultNumbeOfTurns = 3;
+        private const PlayerType DefaultPlayerType = PlayerType.Human;
+        
         public static Arguments Parse(string[] args)
         {
-            const string defaultNumbeOfTurns = "3";
-            const string defaultPlayer = "human";
-
-            var numberOfTurns = Convert.ToInt32(ParseArg(args, "--turns", defaultNumbeOfTurns));
-            var player1 = ParseArg(args, "--player1", defaultPlayer);
-            var player2 = ParseArg(args, "--player2", defaultPlayer);
-
-            return new Arguments(numberOfTurns, player1, player2);
+            var numberOfTurns = ConvertToInt(GetArg(args, "--turns"), DefaultNumbeOfTurns);
+            var playerType1 = ConvertToPlayerType(GetArg(args, "--player1"), DefaultPlayerType);
+            var playerType2 = ConvertToPlayerType(GetArg(args, "--player2"), DefaultPlayerType);
+            return new Arguments(numberOfTurns, playerType1, playerType2);
         }
-        
-        private static string ParseArg(IEnumerable<string> args, string argName, string defaultValue)
+
+        private static int ConvertToInt(string intAsString, int defaultValue)
         {
-            var value = args
+            if (!int.TryParse(intAsString, out var numberOfTurns))
+                return defaultValue;
+
+            if (numberOfTurns < 1)
+                return defaultValue;
+
+            return numberOfTurns;
+        }
+
+        private static PlayerType ConvertToPlayerType(string playerType, PlayerType defaultPlayerType)
+        {
+            switch (playerType)
+            {
+                case "human": return PlayerType.Human;
+                case "random": return PlayerType.Random;
+                case "tactical": return PlayerType.Tactical;
+                default: return defaultPlayerType;
+            }
+        }
+
+        private static string GetArg(IEnumerable<string> args, string argName)
+        {
+            return args
                 .SkipWhile(x => x != argName)
                 .Skip(1).FirstOrDefault();
-            return value ?? defaultValue;
         }
     }
 }

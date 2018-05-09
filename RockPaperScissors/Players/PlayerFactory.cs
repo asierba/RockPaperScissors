@@ -11,13 +11,13 @@ namespace RockPaperScissors.Players
             _randomGenerator = randomGenerator;
         }
 
-        public IPlayer Create(string playerType, string playerName)
+        public IPlayer Create(PlayerType playerType, string playerName)
         {
             switch (playerType)
             {
-                case "human":
+                case PlayerType.Human:
                     return new HumanPlayer(playerName);
-                case "random":
+                case PlayerType.Random:
                     return new RandomPlayer(_randomGenerator);
                 default:
                     throw new ArgumentException("not recognized player type");

@@ -1,18 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using RockPaperScissors.Players;
 
 namespace RockPaperScissors
 {
     public class Arguments
     {
-        public Arguments(int numberOfTurns, string player1, string player2)
+        public Arguments(int numberOfTurns, PlayerType playerType1, PlayerType playerType2)
         {
             NumberOfTurns = numberOfTurns;
-            Player1 = player1;
-            Player2 = player2;
+            PlayerType1 = playerType1;
+            PlayerType2 = playerType2;
         }
 
         public int NumberOfTurns { get; }
-        public string Player1 { get; }
-        public string Player2 { get; }
+        public PlayerType PlayerType1 { get; }
+        public PlayerType PlayerType2 { get; }
     }
 }
