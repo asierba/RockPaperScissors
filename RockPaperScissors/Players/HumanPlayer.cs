@@ -14,8 +14,8 @@ namespace RockPaperScissors.Players
         {
             _userInterface = userInterface;
             
-            var keys = string.Join(',', PossibleMoves.Select(x => x.Key));
-            _askForInputtext = $"{playerName} input ({keys}):";
+            var moveKeys = string.Join(',', PossibleMoves.Select(x => x.Key));
+            _askForInputtext = $"{playerName} input ({moveKeys}):";
         }
 
         public IMove GetMove()

@@ -38,8 +38,8 @@ namespace RockPaperScissors.Test.Helpers
 
         public Game Build()
         {
-            var programArgs = new[] {"--turns", _numberOfTurns.ToString(), "--player1", _playerType1, "--player2", _playerType2};
-            return GameFactory.Create(programArgs, _randomGenerator, _consoleInterface);
+            var args = new[] {"--turns", _numberOfTurns.ToString(), "--player1", _playerType1, "--player2", _playerType2};
+            return GameFactory.Create(args, _randomGenerator, _consoleInterface);
         }
     }
 }

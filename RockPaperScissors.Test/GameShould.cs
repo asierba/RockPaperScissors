@@ -28,7 +28,7 @@ namespace RockPaperScissors.Test
         [InlineData(Rock, Rock, Score.Draw)] 
         [InlineData(Paper, Paper, Score.Draw)] 
         [InlineData(Scissors, Scissors, Score.Draw)] 
-        public void CalculatesScore(string player1Move, string player2Move, Score expectedScore)
+        public void CalculateScore(string player1Move, string player2Move, Score expectedScore)
         {
             MockConsoleInput(
                 player1Move, 
@@ -82,7 +82,7 @@ Player1Wins!!
         }
 
         [Fact]
-        public void PlayAGameWithTwoRandomCpuPlayers()
+        public void PlayAFullGameWithTwoRandomCpuPlayers()
         {
             var randomMoves = new []{
                 Scissors, 
@@ -127,7 +127,7 @@ Player1Wins!!
         }
 
         [Fact]
-        public void PlayAGameWithMixOfHumanAndRandomCpuPlayers()
+        public void PlayAFullGameWithMixOfHumanAndRandomCpuPlayers()
         {
             MockConsoleInput(
                 Scissors, 
@@ -170,7 +170,7 @@ Player1Wins!!
         }
 
         [Fact]
-        public void PlayAGameOfTwoTacticalPlayers()
+        public void PlayAFullGameOfTwoTacticalPlayers()
         {
             var randomMoves = new []{
                 Scissors, 

@@ -19,7 +19,7 @@ namespace RockPaperScissors.Test
         [InlineData("nonenumeric")]
         [InlineData("-3")]
         [InlineData("0")]
-        public void DefaultsNumberOfTurnsTo3_WhenInvalidNumber(string turns)
+        public void DefaultNumberOfTurnsTo3_WhenInvalidNumber(string turns)
         {
             var args = new[] { "--turns", turns};
             var result = ArgumentParser.Parse(args);
@@ -27,7 +27,7 @@ namespace RockPaperScissors.Test
         }
 
         [Fact]
-        public void DefaultsNumberOfTurnsTo3_WhenNoArgs()
+        public void DefaultNumberOfTurnsTo3_WhenNoArgs()
         {
             var args = new string[] {};
             var result = ArgumentParser.Parse(args);
@@ -35,17 +35,9 @@ namespace RockPaperScissors.Test
         }
         
         [Fact]
-        public void DefaultsNumberOfTurnsTo3_WhenNoTurns()
+        public void DefaultNumberOfTurnsTo3_WhenNoTurns()
         {
             var args = new[] { "--turns"};
-            var result = ArgumentParser.Parse(args);
-            Assert.Equal(3, result.NumberOfTurns);
-        }
-        
-        [Fact]
-        public void DefaultsNumberOfTurnsTo3_WhenOtherArgs()
-        {
-            var args = new[] { "--player1", "human"};
             var result = ArgumentParser.Parse(args);
             Assert.Equal(3, result.NumberOfTurns);
         }
@@ -54,7 +46,7 @@ namespace RockPaperScissors.Test
         [InlineData("human", PlayerType.Human)]
         [InlineData("random", PlayerType.Random)]
         [InlineData("tactical", PlayerType.Tactical)]
-        public void ParsePlayer(string playerTypeArg, PlayerType playerType)
+        public void ParsePlayer1And2(string playerTypeArg, PlayerType playerType)
         {
             var args = new[] { "--player1", playerTypeArg, "--player2", playerTypeArg};
             var result = ArgumentParser.Parse(args);
@@ -63,7 +55,7 @@ namespace RockPaperScissors.Test
         }
 
         [Fact]
-        public void DefaultsPlayersToHuman()
+        public void DefaultPlayerToHuman_WhenNoPlayer()
         {
             var args = new[] { "--player2"};
             var result = ArgumentParser.Parse(args);
@@ -71,7 +63,7 @@ namespace RockPaperScissors.Test
         }
         
         [Fact]
-        public void DefaultsPlayersToHuman_WhenInvalidPlayerType()
+        public void DefaultPlayersToHuman_WhenInvalidPlayerType()
         {
             var args = new[] { "--player1", "invalidtype", "--player2", "invalidtype"};
             var result = ArgumentParser.Parse(args);

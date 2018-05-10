@@ -11,18 +11,19 @@ namespace RockPaperScissors
         
         public static Arguments Parse(string[] args)
         {
-            var numberOfTurns = ConvertToInt(GetArg(args, "--turns"), DefaultNumbeOfTurns);
+            var numberOfTurns = ConvertToNumberOfTurns(GetArg(args, "--turns"), DefaultNumbeOfTurns);
             var playerType1 = ConvertToPlayerType(GetArg(args, "--player1"), DefaultPlayerType);
             var playerType2 = ConvertToPlayerType(GetArg(args, "--player2"), DefaultPlayerType);
             return new Arguments(numberOfTurns, playerType1, playerType2);
         }
 
-        private static int ConvertToInt(string intAsString, int defaultValue)
+        private static int ConvertToNumberOfTurns(string numberOfTurnsAsString, int defaultValue)
         {
-            if (!int.TryParse(intAsString, out var numberOfTurns))
+            if (!int.TryParse(numberOfTurnsAsString, out var numberOfTurns))
                 return defaultValue;
 
-            if (numberOfTurns < 1)
+            var validNumberOfTurns = numberOfTurns >= 1;
+            if (!validNumberOfTurns)
                 return defaultValue;
 
             return numberOfTurns;
